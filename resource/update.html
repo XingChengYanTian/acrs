@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>update.html</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link href="css/common.css" rel="stylesheet">
+<link href="css/common-min.css" rel="stylesheet">
+<link href="css/entry.css" rel="stylesheet" charset="utf-8">
+</head>
+<body style="background: rgba(8, 36, 32, 0.9) none repeat scroll 0% 0%">
+	<div class="frame">
+		<a href="javascript:;" title="关闭" class="frame_close"><img
+			src="images/close.png" alt="关闭">
+		</a> <a href="javascript:;" title="最小化" class="frame_min"><img
+			src="images/min.png" alt="最小化">
+		</a>
+	</div>
+	<div class="center500">
+		<form action="" class="form">
+			<input id="acId" type="hidden" />
+			<fieldset>
+				<ol>
+					<li><label for="siteName" class="font_white fyahei f14px">Site-Name：</label>
+						<input id="siteName" class="font_white fyahei f14px"
+						name="siteName" type="text" />
+					</li>
+					<li><label for="siteUrl" class="font_white fyahei f14px">Site-Url：</label>
+						<input id="siteUrl" class="font_white fyahei f14px" name="siteUrl"
+						type="text" />
+					</li>
+					<li><label for="accountName" class="font_white fyahei f14px">Account-Name：</label>
+						<input id="accountName" class="font_white fyahei f14px"
+						name="accountName" type="text" />
+					</li>
+					<li><label for="accountPassword"
+						class="font_white fyahei f14px">Account-Password：</label> <input
+						id="accountPassword" class="font_white fyahei f14px"
+						name="accountPassword" type="text" />
+					</li>
+					<!--             <li> -->
+					<!--                 <label for="nickName"  class="font_white fyahei f14px ">Nick-Name：</label> -->
+					<!--                 <input id="nickName" class="font_white fyahei f14px " name="nickName"  type="text" /> -->
+					<!--             </li> -->
+					<li><label for="comments" class="font_white fyahei f14px">Comments：</label>
+						<textarea id="comments" class="font_white fyahei f14px qa-content"
+							name="comments" cols="30" rows="4"></textarea>
+					</li>
+				</ol>
+			</fieldset>
+
+			<fieldset class="submit">
+				<a class="green_button button font_white fyahei f14px"
+					id="modify_btns">modified</a> <a
+					class="orange_button button font_white fyahei f14px"
+					id="close_models">cancel</a>
+			</fieldset>
+		</form>
+	</div>
+</body>
+<script type="text/javascript" src="js/jquery1.7.2.js"></script>
+<script type="text/javascript" src="js/jquery.model.js"></script>
+<script type="text/javascript" src="js/encryptsf.js"></script>
+<script type="text/javascript" src="js/json-to-string.js"></script>
+<script type="text/javascript" src="js/frame.js"></script>
+<script type="text/javascript">
+	function getParamater(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null)
+			return (r[2]);
+		return null;
+	}
+	$(function() {
+		var initForm = function() {
+			$("#acId").val(getParamater("id"));
+			$("#siteName").val(encrypt.decode(getParamater("siteName")));
+			$("#siteUrl").val(encrypt.decode(getParamater("siteUrl")));
+			$("#accountName").val(encrypt.decode(getParamater("encryptName")));
+			$("#accountPassword").val(
+					encrypt.decode(getParamater("encryptPwd")));
+			//$("#nickName").val(getParamater("id"));
+			$("#comments").val(encrypt.decode(getParamater("accountMemo")));
+		}
+		initForm();
+		$("#close_models").click(function() {
+			closeParentModel();
+		});
+
+		$("#modify_btns").click(function() {
+			var id = $("#acId").val();
+			var siteName = $("#siteName").val();
+			var siteUrl = encrypt.encode($("#siteUrl").val());
+			var accountName = encrypt.encode($("#accountName").val());
+			var accountPassword = encrypt.encode($("#accountPassword").val());
+			//var nickName = $("#nickName").val();
+			var comments = $("#comments").val();
+
+			var obj = {
+				"id" : id,
+				"siteName" : siteName,
+				"siteUrl" : siteUrl,
+				"encryptName" : accountName,
+				"encryptPwd" : accountPassword,
+				//"nickName" : nickName,
+				"accountMemo" : comments
+			}
+
+			var jsonStr = jsonToString(obj);
+			var encryptJson = encrypt.encode(jsonStr);
+			//            调用Java中的entryAccount方法
+			var json = modifyAccount(encryptJson);
+			json = encrypt.decode(json);
+
+			var jsonObj = $.parseJSON(json);
+
+			if (jsonObj.state == 100) {
+				$.model.alertMsg({
+					"msg" : "<h2 class='fyahei f14px'>修改成功 !</h2>",
+					"rollback" : function() {
+						closeParentModel();
+					}
+				});
+			} else {
+				$.model.alertMsg({
+					"msg" : "<h2 class='fyahei f14px'>修改失败 !</h2>"
+				});
+			}
+		});
+
+	});
+</script>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" charset="utf-8" content="text/html">
+<link charset="utf-8" href="css/common.css" rel="stylesheet">
+<link charset="utf-8" href="css/common-min.css" rel="stylesheet">
+<link charset="utf-8" href="css/tab.css" rel="stylesheet">
+<style type="text/css">
+	.green_button{
+		width:18px;
+	}
+	.console ul{
+		list-style: none;
+	}
+	.console ul li{
+		display: inline-block;
+	}
+</style>
+</head>
+<body style="">
+	<div class="frame">
+	 <div class="frame_move"></div>
+		<a href="javascript:;" title="关闭" class="frame_close"><img
+			src="images/close.png" alt="关闭">
+		</a> <a href="javascript:;" title="最小化" class="frame_min"><img
+			src="images/min.png" alt="最小化">
+		</a>
+	</div>
+	<div id="container">
+		<div class="center920">
+			<div class="console">
+				<a class="button green_button" title="添加" id="entry_btn"><img style="width:18px;height:18px" src='images/add-icon.png' /></a>
+				<a class="button green_button" title="刷新" id="refrush_btn"><img style="width:18px;height:18px" src="images/refush-icon.png"/></a>
+<!-- 				<input type="text" class="font_white fyahei f14px" /> -->
+<!-- 				<a href="javascript:;" title="查找" style="width:68px;" class="button green_button"><img style="width:18px;height:18px" src="images/search-icon.png"/></a> -->
+			</div>
+			<table class="font_white fyahei f14px">
+				<caption class="f16px txtc">
+					<em>Admin account information list</em>
+				</caption>
+				<thead>
+					<tr>
+						<th>&nbsp;&nbsp;</th>
+						<th>Site-Name</th>
+						<th>Site-Url</th>
+						<th>Account-Name</th>
+						<th>Password</th>
+						<th>Console</th>
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="6" align="center"><span id="page" style="float: right;margin-right: 20px;margin-top: 10px"></span> <span id="countData"
+							style="float: left;margin-left: 20px;margin-top: 10px">总0条，共0页</span>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+
+		<span style="display:none" id="entry-span">
+			<div class="model"
+				style="display:block;width:500px;min-width: 200px;background: rgba(0,0,0,0.4)">
+				<div class="model-header" style="background: rgba(0,0,0,0.42)">
+					<h2 class="f18px fyahei  letter" id="description_title"></h2>
+					<a href="javascript:;" class="model_close">×</a>
+				</div>
+				<div class="model-content" style="height: 435px;">
+					<iframe src="" id="main" name="main" frameBorder=0 height=165
+						scrolling=no width=300 allowTransparency="true"></iframe>
+				</div>
+			</div>
+			<div class="lean_overlay" style="display:block"></div> </span>
+	</div>
+
+
+</body>
+
+<script type="text/javascript" src="js/jquery1.7.2.js"></script>
+<script type="text/javascript" src="js/jquery.model.js"></script>
+<script type="text/javascript" src="js/encryptsf.js"></script>
+<script type="text/javascript" src="js/json-to-string.js"></script>
+<script type="text/javascript" src="js/frame.js"></script>
+<!-- <script type="text/javascript" src="js/jquery.mousewheel.js"></script> -->
+<script type="text/javascript">
+	$(function() {
+		$("table tbody tr td").live({
+			"mouseover" : function() {
+				var tr = $(this).parent().attr("class", "bg");
+				tr.find("td").css({
+					"background" : "rgba(0, 0, 0, 0.3)",
+					"cursor" : "pointer"
+				});
+			},
+			"mouseout" : function() {
+				$(".bg td").css("background", "rgba(0, 0, 0, 0.24)");
+			}
+		});
+
+		var initModel = function() {
+
+			var model_width = parseInt($(".model").css("width"));
+			var model_height = parseInt($(".model").css("height"));
+
+			//window.console.log(model_width+ "  "+model_height);
+			//clienX clientY
+			var pagey = $(window).height();
+			var pagex = $(window).width();
+
+			//window.console.log(pagex+ "  "+pagey);
+
+			var modelLeft = (pagex - model_width) / 2;
+			var modelTop = "5%";
+
+			//window.console.log(modelLeft+ "  "+modelTop);
+
+			$(".model").css({
+				"left" : modelLeft + "px",
+				"top" : modelTop
+			});
+
+		}
+		initModel();
+		$("#entry_btn").click(function() {
+			initModel();
+			$("#description_title").text("Admin account information entry");
+			$("#entry-span").fadeIn();
+			$.model.open("#entry-span");
+			$("#main").attr("src", "entry.html").load();
+
+		});
+		$(".model_close").click(function() {
+			$("#entry-span").fadeOut();
+		});
+
+		$(".delete-btn").live({
+			"click" : function() {
+				var $this = $(this);
+				var id = $this.attr("data-value");
+				var jsonStr = deleteAccount(id);
+				jsonStr = encrypt.decode(jsonStr);
+				var jsonObj = $.parseJSON(jsonStr);
+				if (jsonObj.state == 100) {
+					$.model.alertMsg({
+						"msg" : "<h2 class='fyahei f14px'>删除成功 !</h2>",
+						"rollback" : function() {
+							list(currentPageNo);
+						},
+						"times" : 3
+					//3秒之后自动刷新列表
+					});
+				} else {
+					$.model.alertMsg({
+						"msg" : "<h2 class='fyahei f14px'>删除失败 !</h2>"
+					});
+				}
+			}
+		});
+
+		$(".modify-btn").live(
+				{
+					"click" : function() {
+						initModel();
+						$("#entry-span").fadeIn();
+						$("#description_title").text(
+								"Admin account information modified");
+						$.model.open("#entry-span");
+						var loc = $(this).attr("data-value");
+						$("#main").attr("src", "update.html?" + loc).load();
+					}
+				});
+
+		$(".pageLink").live("click", function() {
+			currentPageNo = $(this).attr("data-value");
+			// 			$(".pageLink").css("color", "red");
+			// 			$(this).css("color", "#fff");
+
+			list(currentPageNo);
+		});
+		$("#refrush_btn").click(function() {
+			list(currentPageNo);
+		});
+
+		$(".view-link").live("click", function() {
+			var $this = $(this);
+			var $parent = $this.parent();
+			var data = $parent.attr("data-value");
+			var state = $parent.attr("state");
+			if (state == 0) {
+				$parent.find("label").text(data);
+				$parent.attr("state", 1)
+			} else {
+				$parent.find("label").text("***********");
+				$parent.attr("state", 0);
+			}
+		});
+
+		// 		$(".coyp-link").live("click",function(){
+
+		// 		});
+		list(currentPageNo);
+		
+		$("a[data-default=\"true\"]").click(function(){
+			var $this = $(this);
+			var href = $this.attr("data-href");
+			openDefaultBrowser(href);
+		});
+	});
+	var currentPageNo = 1;
+	var pageor = null;
+	//分页对象
+	function pagenation(data, pageNo) {
+		var pg = {
+			"pageNo" : 0,
+			"pageSize" : 0,
+			"allPage" : 0,
+			"count" : 0,
+			"data" : []
+		};
+		var length = data.length;
+		pg.count = length;
+		pg.pageSize = 5;
+		pg.allPage = Math.ceil((pg.count / pg.pageSize));
+		pg.pageNo = pageNo;
+		pg.data = [];
+		var end = pg.pageSize * pg.pageNo;
+		if (end >= length) {
+			end = length;
+		}
+		for ( var i = pg.pageSize * (pageNo - 1); i < end; i++) {
+			pg.data.push(data[i]);
+		}
+		return pg;
+	}
+	//获取数据
+	function list(pageNo) {
+		var jsonStr = searchAccount();
+		var json = encrypt.decode(jsonStr);
+		var msg = $.parseJSON(json);
+		$("table tbody tr").remove();
+		if (msg.state == 100) {
+			var info = pagenation(msg.data, pageNo);
+			pageor = info;
+			var data = info.data;
+			$("#page a").remove();
+			for ( var i = 0; i < data.length; i++) {
+				$("table tbody")
+						.append(
+								'<tr>	<td>&nbsp;&nbsp;</td><td>'
+										+ data[i].siteName
+										+ '</td><td><a data-default="true" data-href="'
+										+ encrypt.decode(data[i].siteUrl)
+										+ '">'
+										+ encrypt.decode(data[i].siteUrl)
+										+ '</a></td><td>'
+										+ encrypt.decode(data[i].encryptName)
+										+ '</td>'
+										+ '<td>'
+										+ '<span state="0" class="pwd_info" data-value="'
+										+ encrypt.decode(data[i].encryptPwd)
+										+ '"><label>***********</label><img src="images/view.png" width="28px" height="28px" class="view-link" /></span>'
+										+ '</td>'
+										+ '<td><a href="javascript:;" data-value="id='
+										+ data[i].id
+										+ '&siteName='
+										+ encrypt.encode(data[i].siteName)
+										+ '&siteUrl='
+										+ data[i].siteUrl
+										+ '&encryptName='
+										+ data[i].encryptName
+										+ '&encryptPwd='
+										+ data[i].encryptPwd
+										+ '&accountMemo='
+										+ encrypt.encode(data[i].accountMemo)
+										+ '" class="modify-btn">修改</a>&nbsp;<a href="javascript:;" data-value="'+data[i].id+'" class="delete-btn" style="color:#999">删除</a>&nbsp;</td></tr>');
+
+			}
+			$("#page").html("");
+			for ( var i = 1; i <= info.allPage; i++) {
+				$("#page").append(
+						"<a class='pageLink' href='javascript:;' data-value='"+i+"'><i>"
+								+ i + "</i></a>&nbsp;&nbsp;");
+			}
+			$("#countData").text("总" + info.count + "条，共" + info.allPage + "页");
+			var pageLink = $(".pageLink");
+			for ( var i = 0; i < pageLink.length; i++) {
+				if ($(pageLink[i]).text() == currentPageNo) {
+					$(pageLink[i]).css("color", "#fff");
+				}
+			}
+		}
+	}
+	
+	function closeModel() {
+		$("#entry-span").fadeOut();
+		list(currentPageNo);
+	}
+</script>
+</html>

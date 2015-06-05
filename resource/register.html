@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" charset="utf-8" content="text/html">
+    <link charset="utf-8" href="css/common.css" rel="stylesheet">
+    <link charset="utf-8" href="css/common-min.css" rel="stylesheet">
+    <link charset="utf-8" href="css/login.css" rel="stylesheet">
+
+
+</head>
+<body>
+<div class="frame">
+ <div class="frame_move"></div>
+		<a href="javascript:;" title="关闭" class="frame_close"><img
+			src="images/close.png" alt="关闭">
+		</a> <a href="javascript:;" title="最小化" class="frame_min"><img
+			src="images/min.png" alt="最小化">
+		</a>
+	</div>
+<div id="container">
+    <div class="center500">
+        <form action="" class="form" id="reg-form">
+            <fieldset>
+                <legend class="font_white fyahei f18px">Administer register to...</legend>
+                <ol>
+                    <li>
+                        <label for="name"  class="font_white fyahei f14px">用户名：</label>
+                        <input id="name" class="font_white fyahei f14px" name="name" class="text" type="text" />
+                        <i class=""></i>
+                    </li>
+                    <li>
+                        <label for="password"  class="font_white fyahei f14px">密码：</label>
+                        <input id="password" class="font_white fyahei f14px" name="password" class="text" type="password" />
+                    </li>
+
+                    <li>
+                        <label for="repassword"  class="font_white fyahei f14px">重复密码：</label>
+                        <input id="repassword" class="font_white fyahei f14px" name="repassword" class="text" type="password" />
+                    </li>
+                    <li>
+                        <div class="pwd_weight">
+                            <p></p>
+                        </div>
+                    </li>
+                    <!--<li>-->
+                        <!--<div class="pwd_weight">-->
+
+                            <!--<p></p>-->
+                            <!--<label>非常强</label>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                    <!---->
+
+
+
+                </ol>
+            </fieldset>
+
+            <fieldset class="submit">
+                <a class="green_button button font_white fyahei f14px" id="submit_btn">submit</a>
+                <a class="orange_button button font_white fyahei f14px" id="reset_btn"  >reset</a>
+            </fieldset>
+        </form>
+
+    </div>
+</div>
+
+
+</body>
+
+<script type="text/javascript" src="js/jquery1.7.2.js"></script>
+<script type="text/javascript" src="js/jquery.model.js"></script>
+<script type="text/javascript" src="js/encryptsf.js"></script>
+<script type="text/javascript">
+
+$(function(){
+
+	$("#submit_btn").click(function(){
+		var $this = $(this);
+		var name = $("#name").val();
+		var password = $("#password").val();
+		var repassword = $("#repassword").val();
+		
+		if(password != repassword){
+			$(".pwd_weight p").addClass("p_error").text("两次密码输入不一致");
+			return;
+		}else{
+			$(".pwd_weight p").removeClass("p_error").text("");
+		}
+		//base64 encoding
+		name = encrypt.encode(name);
+		password = encrypt.encode(password);
+		
+		var json = entryUserInfo(name,password);
+		var jsonObj = $.parseJSON(encrypt.decode(json));
+		if(jsonObj.state==100){
+			$(".pwd_weight p").removeClass("p_error").addClass("p_ok").text("注册成功! 3秒后跳转到登录页面...");
+			setTimeout(function(){
+				registerSuccess();
+			}, 3000);
+			
+		}else{
+			$(".pwd_weight p").addClass("p_error").text("注册失败！");
+		}
+	});
+	
+	
+	$("#reset_btn").click(function(){
+		$("#name").val("");
+		$("#password").val("");
+		$("#repassword").val("");
+	});
+
+});
+	
+</script>
+</html>

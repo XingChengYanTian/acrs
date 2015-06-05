@@ -1,0 +1,69 @@
+
+.center500{
+
+    width: 500px;
+    background: rgba(0, 0, 0, 0.36);
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+   
+}
+.center920{
+
+    width: 920px;
+    background: rgba(0, 0, 0, 0.36);
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+.center450{
+    width: 450px;
+    background: rgba(0, 0, 0, 0.36);
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+.center500,.center920{
+    margin: 0 auto;
+}
+input[type="text"],input[type="password"],textarea{
+    border:1px solid rgba(255, 255, 255, 0.32);
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 200px;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+
+}
+input[type="text"]:hover,input[type="password"]:hover,textarea:hover{
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+input[type="text"]:hover,input[type="password"]:focus,textarea:focus{
+    border-color: rgba(255, 255, 255, 0.52);
+}
+.button{
+    width: 80px;
+}
+.frame{
+    width: 100%;
+    height: 30px;
+    background-color: rgba(2, 0, 24, 0.15);
+    padding: 0;
+    margin: 0;
+}
+
+.frame a{
+    float: right;
+    width: 4%;
+}
+.frame a img{
+    width: 24px;
+    height: 24px;
+}
+
+.frame div{
+    float: left;
+    width: 92%;
+    height: 30px;
+}

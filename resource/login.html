@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" charset="utf-8" content="text/html">
+<link charset="utf-8" href="css/common.css" rel="stylesheet">
+<link charset="utf-8" href="css/common-min.css" rel="stylesheet">
+<link charset="utf-8" href="css/login.css" rel="stylesheet">
+
+
+</head>
+<body>
+	<div class="frame">
+		 <div class="frame_move"></div>
+		<a href="javascript:;" title="关闭" class="frame_close"><img
+			src="images/close.png" alt="关闭">
+		</a> <a href="javascript:;" title="最小化" class="frame_min"><img
+			src="images/min.png" alt="最小化">
+		</a>
+	</div>
+	<div id="container">
+		<div class="center500">
+
+			<form action="" class="form">
+				<fieldset>
+					<legend class="font_white fyahei f18px">Administer sign
+						to...</legend>
+					<ol>
+						<li><label for="name" class="font_white fyahei f14px">用户名：</label>
+							<input id="name" class="font_white fyahei f14px" name="name"
+							class="text" type="text" value="admin"/></li>
+						<li><label for="password" class="font_white fyahei f14px">密码：</label>
+							<input id="password" class="font_white fyahei f14px"
+							name="password" class="text" type="password" value="mmmmm"/></li>
+						<li>
+							<div class="pwd_weight">
+								<p></p>
+							</div></li>
+					</ol>
+				</fieldset>
+
+				<fieldset class="submit">
+					<a class="green_button button font_white fyahei f14px"
+						id="login-btn">login</a> <a
+						class="orange_button button font_white fyahei f14px" id="reg-btn">register</a>
+				</fieldset>
+			</form>
+
+		</div>
+	</div>
+
+
+</body>
+
+<script type="text/javascript" src="js/jquery1.7.2.js"></script>
+<script type="text/javascript" src="js/jquery.model.js"></script>
+<script type="text/javascript" src="js/encryptsf.js"></script>
+<script type="text/javascript" src="js/frame.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$(document).ready(function(){
+			$(".form").keydown(function(e){
+				var curKey = e.which;
+				if(curKey == 13){
+				$("#login-btn").click();
+					return false;
+				}
+			}); 
+		});
+		
+		$("#login-btn").click(
+				function() {
+					var $this = $(this);
+					var name = $("#name").val();
+					var password = $("#password").val();
+					//base64 encoding
+					name = encrypt.encode(name);
+					password = encrypt.encode(password);
+					//调用java中注册的 register 方法
+					var jsonStr = login(name, password);
+
+					jsonStr = encrypt.decode(jsonStr);
+					var jsonObj = $.parseJSON(jsonStr);
+					if (jsonObj.state == 100) {//登录成功
+						$(".pwd_weight p").addClass("p_error").remove("p_ok")
+								.text(jsonObj.msg);
+						setTimeout(function(){
+							loginSuccess();
+						}, 2000)
+						
+					} else {//登录失败
+						$(".pwd_weight p").addClass("p_error")
+								.text(jsonObj.msg);
+					}
+
+				});
+
+		$("#reg-btn").click(function() {
+			gotoRegisterPage();
+		});
+	});
+</script>
+</html>

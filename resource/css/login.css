@@ -1,0 +1,58 @@
+.center500{
+    margin-top: 10%;
+}
+.form{
+    padding: 2px;
+}
+fieldset {
+    margin: 1.5em 0 0 0;
+    padding: 0;
+}
+legend {
+    margin-left: 1em;
+    color: #000000;
+    font-weight: bold;
+    font-size: 18px;
+}
+fieldset ol {
+    padding: 1em 1em 0 1em;
+    list-style: none;
+}
+fieldset li {
+    padding-bottom: 1em;
+}
+fieldset.submit {
+    border-style: none;
+    text-align: center;
+    margin-bottom: 20px;
+}
+fieldset label {
+    float: left;
+    width: 10em;
+    font-size: 14px;
+    margin-right: 1em;
+    text-align: right;
+    padding-top:8px;
+}
+.pwd_weight{
+    width: 200px;
+    height: 15px;
+    float: right;
+    margin-right: 100px;
+}
+.pwd_weight p{
+    width: 200px;
+    height: 10px;
+    float: left;
+    margin-bottom: 2px;
+    display: inline-block;
+    
+}
+.p_error{
+	color: #ff191c;
+}
+.p_ok{
+	color: #61ff0a;
+}
+
+

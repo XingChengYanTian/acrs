@@ -1,0 +1,66 @@
+.center920{
+	margin-top:5%;
+    padding: 20px;
+}
+
+table{
+    width: 100%;
+}
+table caption{
+    height: 30px;
+    text-decoration: inherit;
+}
+table thead th{
+    border: 1px solid rgba(31, 14, 17, 0.1);
+    border-radius: 2px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.47);
+    text-align: left;
+    margin-top: 10px;
+}
+table tbody tr td{
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.24);
+    text-align: left;
+    margin-top: 10px;
+    border: 1px solid rgba(31, 14, 17, 0.1);
+}
+table tfoot tr td{
+	height: 40px;
+     background-color: rgba(0, 0, 0, 0.47);
+     text-align: center;
+    margin-top: 10px;
+    border: 1px solid rgba(31, 14, 17, 0.1);
+}
+#entry-span .model{
+    background: rgba(0, 0, 0, 0.70);
+    filter:progid:DXImageTransform.Microsoft.Gradient(startColorstr=#66000000,endColorstr=#66000000);
+}
+#entry-span .model .model-header{
+    border-bottom: 1px solid rgba(217, 217, 217, 0.15);
+    color: #fff;
+    background: rgba(0, 0, 0, 0.70);
+    filter:progid:DXImageTransform.Microsoft.Gradient(startColorstr=#66000000,endColorstr=#66000000);
+}
+#entry-span .model-header p,.model-header h2{
+
+    text-shadow: none;
+}
+ #entry-span .model-content{
+     background: rgba(0, 0, 0, 0.70);
+    filter:progid:DXImageTransform.Microsoft.Gradient(startColorstr=#66000000,endColorstr=#66000000);
+}
+
+ .console{
+     border: 1px dashed rgba(0, 0, 0, 0.32);
+     border-radius: 2px;
+     -webkit-border-radius: 2px;
+     -moz-border-radius: 2px;
+     
+ }
+ .pwd_info{
+	text-align: left;
+	line-height: 32px;
+	margin-top: 15px;
+	display: block;
+ }
